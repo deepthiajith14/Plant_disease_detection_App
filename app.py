@@ -316,7 +316,7 @@ def predict_pipeline(image: Image.Image, get_explanation: bool = True):
     return json.dumps(result_json, indent=2), llm_text
 
 # -------------------------------
-# Gradio App (fast, black JSON)
+# Gradio App 
 # -------------------------------
 demo = gr.Interface(
     fn=predict_pipeline,
@@ -331,5 +331,6 @@ demo = gr.Interface(
 
 if __name__ == "__main__":
     demo.launch()
+
 
 
