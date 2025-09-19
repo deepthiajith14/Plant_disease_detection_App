@@ -236,8 +236,11 @@ class DinoClassifier(nn.Module):
         return self.classifier(pooled)
 
 model_name = "facebook/dinov3-vits16-pretrain-lvd1689m"
-config = AutoConfig.from_pretrained(model_name)
-base_model = AutoModel.from_pretrained(model_name, config=config)
+hf_token = os.environ.get("HF_TOKEN")  # Token from environment variable
+
+config = AutoConfig.from_pretrained(model_name, use_auth_token=hf_token)
+base_model = AutoModel.from_pretrained(model_name, config=config, use_auth_token=hf_token)
+
 
 num_classes = 38
 model = DinoClassifier(base_model, num_classes, config.hidden_size)
@@ -328,4 +331,5 @@ demo = gr.Interface(
 
 if __name__ == "__main__":
     demo.launch()
+
 
