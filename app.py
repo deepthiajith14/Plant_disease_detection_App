@@ -8,6 +8,17 @@ import os
 from transformers import AutoModel, AutoConfig
 from openai import OpenAI
 import json  # for black JSON
+import gdown
+
+# .....................................
+MODEL_PATH = "best.pt"
+if not os.path.exists(MODEL_PATH):
+    # Replace FILE_ID with Google Drive file ID
+    file_id = "1bGRLEC2_5GB53E-zEVH1Z4EQdKGA-YGI"
+    url = f"https://drive.google.com/uc?id={file_id}"
+    print("Downloading model from Google Drive...")
+    gdown.download(url, MODEL_PATH, quiet=False)
+
 
 # -------------------------------
 # Load Knowledge Graph + Symptom Map
@@ -230,7 +241,7 @@ base_model = AutoModel.from_pretrained(model_name, config=config)
 
 num_classes = 38
 model = DinoClassifier(base_model, num_classes, config.hidden_size)
-checkpoint = torch.load("best.pt", map_location="cpu")
+checkpoint = torch.load(MODEL_PATH, map_location="cpu")
 model.load_state_dict(checkpoint["model_state_dict"])
 class_names = checkpoint["classes"]
 model.eval()
@@ -317,3 +328,4 @@ demo = gr.Interface(
 
 if __name__ == "__main__":
     demo.launch()
+
